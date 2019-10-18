@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.view.View;
 
 import com.qualcomm.hardware.lynx.LynxI2cColorRangeSensor;
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -20,15 +21,23 @@ import java.util.Locale;
 //@Disabled
 public class kAutonomus extends LinearOpMode {
 
-    double speed = 0.1;
+    ;
     DcMotor FleftDrive, BleftDrive, FrightDrive, BrightDrive;
     ColorSensor sensorColor;
+    ModernRoboticsI2cRangeSensor rangeSensor;
 
-    void Forward() {
+    //Functions:
+    void Forward( double speed) {
         FleftDrive.setPower(-speed);
         FrightDrive.setPower(speed);
         BleftDrive.setPower(-speed);
         BrightDrive.setPower(speed);
+    }
+    void ForwardLeftTime( double speed) {
+        FleftDrive.setPower(-speed);
+        BleftDrive.setPower(-speed);
+
+
     }
 
     void Stop() {
@@ -46,23 +55,22 @@ public class kAutonomus extends LinearOpMode {
         sleep(time);
     }
 
-    void StrafeLeft(long time) {
+    void StrafeLeft(double speed) {
         FleftDrive.setPower(speed);
-        FrightDrive.setPower(-speed);
         BleftDrive.setPower(-speed);
-        BrightDrive.setPower(speed);
-        sleep(time);
+        FrightDrive.setPower(speed);
+        BrightDrive.setPower(-speed);
     }
 
-    void StrafeRight(long time) {
+    void StrafeRight(double speed) {
         FleftDrive.setPower(-speed);
         FrightDrive.setPower(speed);
         BleftDrive.setPower(speed);
         BrightDrive.setPower(-speed);
-        sleep(time);
+
     }
 
-    void TurnLeft(long time) {
+    void TurnLeft(long time, double speed) {
         FleftDrive.setPower(speed);
         FrightDrive.setPower(-speed);
         BleftDrive.setPower(speed);
@@ -70,7 +78,7 @@ public class kAutonomus extends LinearOpMode {
         sleep(time);
     }
 
-    void TurnRight(long time) {
+    void TurnRight(long time, double speed) {
         FleftDrive.setPower(-speed);
         FrightDrive.setPower(speed);
         BleftDrive.setPower(-speed);
@@ -94,6 +102,13 @@ public class kAutonomus extends LinearOpMode {
         BrightDrive.setPower(-Speed);
     }
 
+    void Back(double speed){
+        FleftDrive.setPower(speed);
+        FrightDrive.setPower(-speed);
+        BleftDrive.setPower(speed);
+        BrightDrive.setPower(-speed);
+    }
+
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -107,6 +122,7 @@ public class kAutonomus extends LinearOpMode {
         final double SCALE_FACTOR = 255;
         int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
         final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
+        rangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "sensor_range");
 
 
         waitForStart();
@@ -114,18 +130,32 @@ public class kAutonomus extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-
-
+            //StrafeLeft(5000, 1);
+            //Color Sensor Part:
             if (sensorColor.blue() > sensorColor.red()) {
-                Stop();
-                speed=0;
+                Back(0.1);
+                if(rangeSensor.rawUltrasonic()==3) {
+                    Stop();
+                }
             }
             else{
-                Forward();
+                if(rangeSensor.rawUltrasonic()>=9 && rangeSensor.rawUltrasonic()<=23){
+                    StrafeLeft(0.5);
+                    ForwardLeftTime(0.6);
+                }
+                else if(rangeSensor.rawUltrasonic()<=8){
+                    Forward(0.5);
+                }
+                else if(rangeSensor.rawUltrasonic()>26){
+                    Back(0.5);
+                }
+
             }
 
 
-
+            telemetry.addData("raw ultrasonic", rangeSensor.rawUltrasonic());
+            telemetry.addData("raw optical", rangeSensor.rawOptical());
+            telemetry.update();
 
             /*Color.RGBToHSV((int) (sensorColor.red() * SCALE_FACTOR),
                     (int) (sensorColor.green() * SCALE_FACTOR),

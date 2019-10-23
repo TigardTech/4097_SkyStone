@@ -15,8 +15,7 @@ public class SFCode extends OpMode {
 
     @Override
     public void loop() {
-        Leftmotor.setPower(gamepad1.left_stick_y);
-        Rightmotor.setPower(gamepad1.right_stick_y);
-
+        Leftmotor.setPower(-gamepad1.left_stick_y);
+        Rightmotor.setPower(-gamepad1.left_stick_y);
     }
 }

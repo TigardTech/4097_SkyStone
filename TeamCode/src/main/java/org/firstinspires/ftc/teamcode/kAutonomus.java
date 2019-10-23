@@ -67,17 +67,17 @@ public class kAutonomus extends LinearOpMode {
     }
 
     void StrafeLeft(double speed) {
-        FleftDrive.setPower(speed);
-        FrightDrive.setPower(-speed);
-        BleftDrive.setPower(-speed);
-        BrightDrive.setPower(speed);
-    }
-
-    void StrafeRight(double speed) {
         FleftDrive.setPower(-speed);
         FrightDrive.setPower(speed);
         BleftDrive.setPower(speed);
         BrightDrive.setPower(-speed);
+    }
+
+    void StrafeRight(double speed) {
+        FleftDrive.setPower(speed);
+        FrightDrive.setPower(-speed);
+        BleftDrive.setPower(-speed);
+        BrightDrive.setPower(speed);
 
     }
 

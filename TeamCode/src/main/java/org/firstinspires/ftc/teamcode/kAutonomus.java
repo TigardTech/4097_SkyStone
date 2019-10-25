@@ -67,17 +67,17 @@ public class kAutonomus extends LinearOpMode {
     }
 
     void StrafeLeft(double speed) {
-        FleftDrive.setPower(-speed);
-        FrightDrive.setPower(speed);
-        BleftDrive.setPower(speed);
-        BrightDrive.setPower(-speed);
-    }
-
-    void StrafeRight(double speed) {
         FleftDrive.setPower(speed);
         FrightDrive.setPower(-speed);
         BleftDrive.setPower(-speed);
         BrightDrive.setPower(speed);
+    }
+
+    void StrafeRight(double speed) {
+        FleftDrive.setPower(-speed);
+        FrightDrive.setPower(speed);
+        BleftDrive.setPower(speed);
+        BrightDrive.setPower(-speed);
 
     }
 
@@ -106,36 +106,39 @@ public class kAutonomus extends LinearOpMode {
     }
 
 
-    void ForwardTime(double speed) {
+    void ForwardTime(double speed, int time) {
         FleftDrive.setPower(-speed);
         FrightDrive.setPower(-speed);
         BleftDrive.setPower(-speed);
         BrightDrive.setPower(-speed);
+        sleep(time);
     }
 
-    void Back(double speed) {
+    void Back(double speed, int time) {
         FleftDrive.setPower(speed);
         FrightDrive.setPower(-speed);
         BleftDrive.setPower(speed);
         BrightDrive.setPower(-speed);
+        sleep(time);
     }
 
 
     @Override
     public void runOpMode() throws InterruptedException {
         //SENSORS
-        gyro = hardwareMap.gyroSensor.get("gyro");
-        gyro.calibrate();
+        //gyro = hardwareMap.gyroSensor.get("gyro");
+        //
+        // gyro.calibrate();
 
         sensorColor = hardwareMap.get(ColorSensor.class, "ColorSensor");
 
         //rangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "sensor_range");
 
         //Drive
-     /*   DcMotor fl_motor = hardwareMap.dcMotor.get("FleftDrive");
-        DcMotor fr_motor = hardwareMap.dcMotor.get("FrightDrive");
-        DcMotor rl_motor = hardwareMap.dcMotor.get("BleftDrive");
-        DcMotor rr_motor = hardwareMap.dcMotor.get("BrightDrive");*/
+        FleftDrive = hardwareMap.dcMotor.get("FleftDrive");
+        FrightDrive = hardwareMap.dcMotor.get("FrightDrive");
+        BleftDrive = hardwareMap.dcMotor.get("BleftDrive");
+        BrightDrive = hardwareMap.dcMotor.get("BrightDrive");
 
 
         FleftDrive.setDirection(DcMotor.Direction.FORWARD);
@@ -144,9 +147,9 @@ public class kAutonomus extends LinearOpMode {
         BleftDrive.setDirection(DcMotor.Direction.FORWARD);
         BrightDrive.setDirection(DcMotor.Direction.REVERSE);
 
-        mecanum = new MecanumDrive(FleftDrive, FrightDrive, BleftDrive, BrightDrive, gyro);
+        //mecanum = new MecanumDrive(FleftDrive, FrightDrive, BleftDrive, BrightDrive, gyro);
 
-        components.add(mecanum);
+        //components.add(mecanum);
 
         //Values
         float hsvValues[] = {0F, 0F, 0F};
@@ -162,33 +165,23 @@ public class kAutonomus extends LinearOpMode {
         while (opModeIsActive()) {
 
             //StrafeLeft(5000, 1);
-
-
+            Back(1, 2000);
+            TurnLeft(2000, 1);
+            Forward(1);
             //Color Sensor Part:
             if (sensorColor.blue() > sensorColor.red()) {
-                Back(0.1);
-                if(rangeSensor.rawUltrasonic()==3) {
-                    Stop();
+                stop();
+                StrafeLeft(1);
+                if(rangeSensor.rawOptical()==3 || rangeSensor.rawUltrasonic()==3){
+                    stop();
                 }
             }
-            else{
-                if(rangeSensor.rawUltrasonic()>=9 && rangeSensor.rawUltrasonic()<=23){
-                    StrafeLeft(0.5);
-                    ForwardLeftTime(0.6);
-                }
-                else if(rangeSensor.rawUltrasonic()<=8){
-                    Forward(0.5);
-                }
-                else if(rangeSensor.rawUltrasonic()>26){
-                    Back(0.5);
-                }
 
-            }
 
             //Update:
-            /*telemetry.addData("raw ultrasonic", rangeSensor.rawUltrasonic());
+            telemetry.addData("raw ultrasonic", rangeSensor.rawUltrasonic());
             telemetry.addData("raw optical", rangeSensor.rawOptical());
-            telemetry.update();*/
+            telemetry.update();
 
             Color.RGBToHSV((int) (sensorColor.red() * SCALE_FACTOR),
                     (int) (sensorColor.green() * SCALE_FACTOR),

@@ -54,15 +54,11 @@ public class JTeleop extends OpMode {
         if(gamepad2.right_bumper){
             George.setPower(1);
         }
-        else{
-            George.setPower(0);
-        }
+
         if(gamepad2.left_bumper) {
             George.setPower(-1);
         }
-        else{
-            George.setPower(0);
-        }
+
 
     }
 }

@@ -24,7 +24,6 @@ import java.util.Locale;
 //@Disabled
 public class kAutonomus extends LinearOpMode {
 
-    int i=0;
     DcMotor FleftDrive, BleftDrive, FrightDrive, BrightDrive;
     ColorSensor sensorColor;
     ModernRoboticsI2cRangeSensor rangeSensor;
@@ -39,17 +38,11 @@ public class kAutonomus extends LinearOpMode {
     //Functions:
     void Forward(double speed) {
         FleftDrive.setPower(-speed);
-        FrightDrive.setPower(-speed);
+        FrightDrive.setPower(speed);
         BleftDrive.setPower(-speed);
-        BrightDrive.setPower(-speed);
+        BrightDrive.setPower(speed);
     }
 
-    void ForwardLeftTime(double speed) {
-        FleftDrive.setPower(-speed);
-        BleftDrive.setPower(-speed);
-
-
-    }
 
     void Stop() {
         FleftDrive.setPower(0);
@@ -58,63 +51,48 @@ public class kAutonomus extends LinearOpMode {
         BrightDrive.setPower(0);
     }
 
-    void Reverse(long time, double speed) {
-        FleftDrive.setPower(speed);
-        FrightDrive.setPower(speed);
-        BleftDrive.setPower(speed);
-        BrightDrive.setPower(speed);
-        sleep(time);
-    }
 
     void StrafeLeft(double speed) {
         FleftDrive.setPower(speed);
-        FrightDrive.setPower(-speed);
+        FrightDrive.setPower(speed);
         BleftDrive.setPower(-speed);
-        BrightDrive.setPower(speed);
+        BrightDrive.setPower(-speed);
     }
 
     void StrafeRight(double speed) {
         FleftDrive.setPower(-speed);
-        FrightDrive.setPower(speed);
+        FrightDrive.setPower(-speed);
         BleftDrive.setPower(speed);
-        BrightDrive.setPower(-speed);
+        BrightDrive.setPower(speed);
 
     }
 
     void TurnLeft(long time, double speed) {
         FleftDrive.setPower(speed);
-        FrightDrive.setPower(-speed);
+        FrightDrive.setPower(speed);
         BleftDrive.setPower(speed);
-        BrightDrive.setPower(-speed);
+        BrightDrive.setPower(speed);
         sleep(time);
     }
 
     void TurnRight(long time, double speed) {
         FleftDrive.setPower(-speed);
-        FrightDrive.setPower(speed);
+        FrightDrive.setPower(-speed);
         BleftDrive.setPower(-speed);
-        BrightDrive.setPower(speed);
-        sleep(time);
-    }
-
-    void Right(long time, double speed) {
-        FleftDrive.setPower(-speed);
-        FrightDrive.setPower(speed);
-        BleftDrive.setPower(-speed);
-        BrightDrive.setPower(speed);
+        BrightDrive.setPower(-speed);
         sleep(time);
     }
 
 
     void ForwardTime(double speed, int time) {
         FleftDrive.setPower(-speed);
-        FrightDrive.setPower(-speed);
+        FrightDrive.setPower(speed);
         BleftDrive.setPower(-speed);
-        BrightDrive.setPower(-speed);
+        BrightDrive.setPower(speed);
         sleep(time);
     }
 
-    void Back(double speed, int time) {
+    void BackTime(double speed, int time) {
         FleftDrive.setPower(speed);
         FrightDrive.setPower(-speed);
         BleftDrive.setPower(speed);
@@ -126,13 +104,12 @@ public class kAutonomus extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         //SENSORS
-        //gyro = hardwareMap.gyroSensor.get("gyro");
-        //
-        // gyro.calibrate();
+        gyro = hardwareMap.gyroSensor.get("gyro");
+         gyro.calibrate();
 
         sensorColor = hardwareMap.get(ColorSensor.class, "ColorSensor");
 
-        //rangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "sensor_range");
+        rangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "sensor_range");
 
         //Drive
         FleftDrive = hardwareMap.dcMotor.get("FleftDrive");
@@ -140,16 +117,9 @@ public class kAutonomus extends LinearOpMode {
         BleftDrive = hardwareMap.dcMotor.get("BleftDrive");
         BrightDrive = hardwareMap.dcMotor.get("BrightDrive");
 
+        mecanum = new MecanumDrive(FleftDrive, FrightDrive, BleftDrive, BrightDrive, gyro);
 
-        FleftDrive.setDirection(DcMotor.Direction.FORWARD);
-        FrightDrive.setDirection(DcMotor.Direction.REVERSE);
-
-        BleftDrive.setDirection(DcMotor.Direction.FORWARD);
-        BrightDrive.setDirection(DcMotor.Direction.REVERSE);
-
-        //mecanum = new MecanumDrive(FleftDrive, FrightDrive, BleftDrive, BrightDrive, gyro);
-
-        //components.add(mecanum);
+        components.add(mecanum);
 
         //Values
         float hsvValues[] = {0F, 0F, 0F};
@@ -164,8 +134,8 @@ public class kAutonomus extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            //StrafeLeft(5000, 1);
-            Back(1, 2000);
+            //mecanum.move(1, 0, 0);
+            BackTime(1, 2000);
             TurnLeft(2000, 1);
             Forward(1);
             //Color Sensor Part:
@@ -229,9 +199,6 @@ public class kAutonomus extends LinearOpMode {
 
 
     }
-
-
-
 
     private void pushTelemetry() {
         telemetry.addData("Gyro Heading", gyro.getHeading());

@@ -15,9 +15,8 @@ public class SevenFiftycode extends OpMode {
 
     @Override
     public void loop() {
-        Leftmotor.setPower(-gamepad1.left_stick_x);
-        Rightmotor.setPower(-gamepad1.left_stick_x);
         Leftmotor.setPower(gamepad1.left_stick_y);
-        Rightmotor.setPower(-gamepad1.left_stick_y);
+        Rightmotor.setPower(-gamepad1.right_stick_y);
+
     }
 }

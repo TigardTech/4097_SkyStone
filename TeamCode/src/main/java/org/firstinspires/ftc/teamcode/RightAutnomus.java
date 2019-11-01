@@ -14,10 +14,10 @@ public class RightAutnomus extends LinearOpMode {
 
     //Functions:
     void Forward(double speed) {
-        FleftDrive.setPower(-speed);
-        FrightDrive.setPower(speed);
-        BleftDrive.setPower(-speed);
-        BrightDrive.setPower(speed);
+        FleftDrive.setPower(speed);
+        FrightDrive.setPower(-speed);
+        BleftDrive.setPower(speed);
+        BrightDrive.setPower(-speed);
     }
 
 
@@ -30,50 +30,50 @@ public class RightAutnomus extends LinearOpMode {
 
 
     void StrafeLeft(double speed) {
-        FleftDrive.setPower(speed);
-        FrightDrive.setPower(speed);
-        BleftDrive.setPower(-speed);
-        BrightDrive.setPower(-speed);
-    }
-
-    void StrafeRight(double speed) {
         FleftDrive.setPower(-speed);
         FrightDrive.setPower(-speed);
         BleftDrive.setPower(speed);
         BrightDrive.setPower(speed);
+    }
+
+    void StrafeRight(double speed) {
+        FleftDrive.setPower(speed);
+        FrightDrive.setPower(speed);
+        BleftDrive.setPower(-speed);
+        BrightDrive.setPower(-speed);
 
     }
 
     void TurnLeft(long time, double speed) {
-        FleftDrive.setPower(speed);
-        FrightDrive.setPower(speed);
-        BleftDrive.setPower(speed);
-        BrightDrive.setPower(speed);
-        sleep(time);
-    }
-
-    void TurnRight(long time, double speed) {
         FleftDrive.setPower(-speed);
         FrightDrive.setPower(-speed);
         BleftDrive.setPower(-speed);
         BrightDrive.setPower(-speed);
+        sleep(time);
+    }
+
+    void TurnRight(long time, double speed) {
+        FleftDrive.setPower(speed);
+        FrightDrive.setPower(speed);
+        BleftDrive.setPower(speed);
+        BrightDrive.setPower(speed);
         sleep(time);
     }
 
 
     void ForwardTime(double speed, int time) {
-        FleftDrive.setPower(-speed);
-        FrightDrive.setPower(speed);
-        BleftDrive.setPower(-speed);
-        BrightDrive.setPower(speed);
-        sleep(time);
-    }
-
-    void BackTime(double speed, int time) {
         FleftDrive.setPower(speed);
         FrightDrive.setPower(-speed);
         BleftDrive.setPower(speed);
         BrightDrive.setPower(-speed);
+        sleep(time);
+    }
+
+    void BackTime(double speed, int time) {
+        FleftDrive.setPower(-speed);
+        FrightDrive.setPower(speed);
+        BleftDrive.setPower(-speed);
+        BrightDrive.setPower(speed);
         sleep(time);
     }
 
@@ -92,8 +92,8 @@ public class RightAutnomus extends LinearOpMode {
         waitForStart();
         while (opModeIsActive()) {
 
-            ForwardTime(1, 2000);
-            TurnRight(2000, 1);
+            ForwardTime(1, 100);
+            TurnRight(500, 1);
             Forward(1);
             //Color Sensor Part:
             if (sensorColor.blue() > sensorColor.red()|| sensorColor.red() > sensorColor.blue()) {

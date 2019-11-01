@@ -104,8 +104,8 @@ public class kAutonomus extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         //SENSORS
-        gyro = hardwareMap.gyroSensor.get("gyro");
-         gyro.calibrate();
+        //gyro = hardwareMap.gyroSensor.get("gyro");
+         //gyro.calibrate();
 
         sensorColor = hardwareMap.get(ColorSensor.class, "ColorSensor");
 
@@ -135,17 +135,17 @@ public class kAutonomus extends LinearOpMode {
         while (opModeIsActive()) {
 
             //mecanum.move(1, 0, 0);
-            BackTime(1, 2000);
-            TurnLeft(2000, 1);
-            Forward(1);
+            //BackTime(1, 2000);
+            //TurnLeft(2000, 1);
+            //Forward(1);
             //Color Sensor Part:
-            if (sensorColor.blue() > sensorColor.red()) {
+            /*if (sensorColor.blue() > sensorColor.red()) {
                 stop();
                 StrafeLeft(1);
                 if(rangeSensor.rawOptical()==3 || rangeSensor.rawUltrasonic()==3){
                     stop();
                 }
-            }
+            }*/
 
 
             //Update:

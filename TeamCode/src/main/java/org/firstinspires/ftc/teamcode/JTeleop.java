@@ -10,9 +10,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 @TeleOp(name = "JLinearTest", group = "Tele")
 public class JTeleop extends OpMode {
         //Declaring variables:
-        double i = 0.10;
         DcMotor Fleftmotor, Bleftmotor, Frightmotor, Brightmotor, George, Grabber;
-        Servo LTailGrabber, RTailGrabber;
+        Servo LTailGrabber,RTailGrabber;
 
 
     @Override
@@ -28,7 +27,7 @@ public class JTeleop extends OpMode {
 
         //Servo
         LTailGrabber=hardwareMap.servo.get("LTail");
-        RTailGrabber=hardwareMap.servo.get("RTail");
+        //RTailGrabber=hardwareMap.servo.get("RTail");
 
 
         //This parts help with me not needing to assing every setpower to a negative or positive
@@ -45,7 +44,8 @@ public class JTeleop extends OpMode {
     @Override
     public void loop() {
         double temp, temp2;
-        i=LTailGrabber.getPosition();
+        double i=0.0005;
+        temp=LTailGrabber.getPosition();
         //Moving Part(an equation that calculates the amount of energy needed, so that motors don't
         //contradict each other)
         double r = Math.hypot(-gamepad1.left_stick_x, gamepad1.left_stick_y);
@@ -76,22 +76,24 @@ public class JTeleop extends OpMode {
             George.setPower(0);
         }
 
-        if(gamepad1.x){
+        if(gamepad1.a){
             temp=LTailGrabber.getPosition() + i;
-            temp2=RTailGrabber.getPosition()+i;
-            if(temp!=0.180 && temp2!=0.180){
-                LTailGrabber.setPosition(temp);
-                RTailGrabber.setPosition(temp2);
-            }
+            LTailGrabber.setPosition(temp);
+            //temp2=RTailGrabber.getPosition()+i;
+            //if(temp<=0.180 /*&& temp2!=0.180*/){
+                //LTailGrabber.setPosition(temp);
+                //RTailGrabber.setPosition(temp2);
+            //}
 
         }
         if(gamepad1.y){
             temp = LTailGrabber.getPosition() - i;
-            temp2=RTailGrabber.getPosition() -i;
-            if(temp!=0.00 && temp2!=0.00) {
-                LTailGrabber.setPosition(temp);
-                RTailGrabber.setPosition(temp2);
-            }
+            LTailGrabber.setPosition(temp);
+            //temp2=RTailGrabber.getPosition() -i;
+            //if(temp>=0.00 /*&& temp2!=0.00*/) {
+                //LTailGrabber.setPosition(temp);
+                //RTailGrabber.setPosition(temp2);
+            //}
         }
 
         if(gamepad1.left_trigger>0){
@@ -107,42 +109,13 @@ public class JTeleop extends OpMode {
             Grabber.setPower(0);
         }
 
-        if(gamepad1.b){
-            boolean control=true;
-            int y=0;
-            while(y<1000) {
-                Fleftmotor.setPower(1);
-                Bleftmotor.setPower(1);
-                Frightmotor.setPower(-1);
-                Brightmotor.setPower(-1);
-                y++;
-            }
-            y=0;
-            while(y<1000) {
-                Fleftmotor.setPower(-1);
-                Bleftmotor.setPower(-1);
-                Frightmotor.setPower(1);
-                Brightmotor.setPower(1);
-                y++;
-            }
-            y=0;
-            while(y<100) {
-                Fleftmotor.setPower(-1);
-                Bleftmotor.setPower(-1);
-                Frightmotor.setPower(-1);
-                Brightmotor.setPower(-1);
-                y++;
-            }
-            y=0;
-            while(y<100) {
-                Fleftmotor.setPower(1);
-                Bleftmotor.setPower(1);
-                Frightmotor.setPower(1);
-                Brightmotor.setPower(1);
-                y++;
-            }
-            y=0;
+        if(gamepad1.x){
+            LTailGrabber.setPosition(0.15);
         }
+        if(gamepad1.b){
+            LTailGrabber.setPosition(0.90);
+        }
+
 
     }
 

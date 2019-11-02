@@ -92,16 +92,12 @@ public class RightAutnomus extends LinearOpMode {
         waitForStart();
         while (opModeIsActive()) {
 
-            ForwardTime(1, 100);
-            TurnRight(500, 1);
-            Forward(1);
+            //ForwardTime(1, 100);
+            //TurnRight(500, 1);
+            Forward(0.3);
             //Color Sensor Part:
-            if (sensorColor.blue() > sensorColor.red()|| sensorColor.red() > sensorColor.blue()) {
+            if (sensorColor.red() > sensorColor.blue()) {
                 stop();
-                StrafeRight(1);
-                if(rangeSensor.rawOptical()==3){
-                    stop();
-                }
             }
 
         }
